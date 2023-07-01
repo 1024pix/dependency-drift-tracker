@@ -1,0 +1,6 @@
+https://github.com/1024pix/pix.git#1d
+https://github.com/1024pix/pix.git#admin
+https://github.com/1024pix/pix.git#api
+https://github.com/1024pix/pix.git#certif
+https://github.com/1024pix/pix.git#mon-pix
+https://github.com/1024pix/pix.git#orga
