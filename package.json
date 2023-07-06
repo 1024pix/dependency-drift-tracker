@@ -4,6 +4,7 @@
   "description": "",
   "main": "src/index.mjs",
   "scripts": {
+    "start": "node src/index.mjs",
     "test": "NODE_ENV=test mocha tests"
   },
   "author": "François de Metz",
