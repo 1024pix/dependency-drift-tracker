@@ -33,7 +33,8 @@ async function main() {
   for await (const { repository, path, packagePath, pmForLibYear } of installResult) {
     const result = await calculateRepository(packagePath, pmForLibYear);
     const summary = createSummary(result);
-    await saveResult(`${repository}#${path}`, summary, result);
+    const safeRepositoryName = getSafeRepositoryName(repository, path);
+    await saveResult(safeRepositoryName, summary, result);
   }
 }
 
@@ -96,13 +97,18 @@ async function calculateRepository(packagePath, packageManager) {
   return result;
 }
 
+export function getSafeRepositoryName(repositoryURL, path) {
+  const repository = path === '' ? repositoryURL : `${repositoryURL}#${path}`;
+  return replaceRepositoryWithSafeChar(repository);
+}
+
 async function saveResult(line, summary, result) {
   await saveSummary(line, summary);
   await saveLastResult(line, result);
 }
 
 async function saveSummary(line, summary) {
-  const filePath = `data/history-${replaceRepositoryWithSafeChar(line)}.json`;
+  const filePath = `data/history-${line}.json`;
   try {
     await access(filePath, constants.F_OK);
   } catch (e) {
@@ -114,7 +120,7 @@ async function saveSummary(line, summary) {
 }
 
 async function saveLastResult(line, result) {
-  const filePath = `data/last-run-${replaceRepositoryWithSafeChar(line)}.json`;
+  const filePath = `data/last-run-${line}.json`;
   await writeFile(filePath, JSON.stringify(result));
 }
 

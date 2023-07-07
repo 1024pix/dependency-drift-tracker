@@ -6,6 +6,7 @@ import {
   cloneRepository,
   replaceRepositoryWithSafeChar,
   createSummary,
+  getSafeRepositoryName,
 } from '../src/index.mjs';
 
 describe('#parseRepositoryLine', function() {
@@ -92,6 +93,27 @@ describe('#createSummary', function() {
     expect(createSummary(result)).to.deep.equal({
       drift: 4,
       pulse: 3,
+    });
+  });
+});
+
+describe('#getSafeRepositoryName', function() {
+  [
+    {
+      given: { repository: 'https://github.com/1024pix/pix.git', path: '' },
+      expect: 'github-com-1024pix-pix-git'
+    },
+    {
+      given: { repository: 'https://github.com/1024pix/pix.git', path: 'api' },
+      expect: 'github-com-1024pix-pix-git-api'
+    },
+    {
+      given: { repository: 'http://github.com/1024pix/pix.git', path: 'api' },
+      expect: 'github-com-1024pix-pix-git-api'
+    },
+  ].forEach((line) => {
+    it(`replace the repository '${line.given.repository}' and path '${line.given.path}' with safe chars`, function () {
+      expect(getSafeRepositoryName(line.given.repository, line.given.path)).to.equal(line.expect);
     });
   });
 });
