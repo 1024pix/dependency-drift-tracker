@@ -30,12 +30,18 @@ async function main() {
       pmForLibYear: forLibYear,
     };
   }));
+  const historyIndex = [];
+  const lastRunIndex = [];
   for await (const { repository, path, packagePath, pmForLibYear } of installResult) {
     const result = await calculateRepository(packagePath, pmForLibYear);
     const summary = createSummary(result);
     const safeRepositoryName = getSafeRepositoryName(repository, path);
-    await saveResult(safeRepositoryName, summary, result);
+    const [historyFileName, lastRunFileName] = await saveResult(safeRepositoryName, summary, result);
+    historyIndex.push({ repository: safeRepositoryName, fileName: historyFileName });
+    lastRunIndex.push({ repository: safeRepositoryName, fileName: lastRunFileName });
   }
+  await saveIndex('history', historyIndex);
+  await saveIndex('last-run', lastRunIndex);
 }
 
 export function parseFile(content) {
@@ -128,6 +134,11 @@ async function saveLastResult(line, result) {
   const filePath = `data/${fileName}`;
   await writeFile(filePath, JSON.stringify(result));
   return fileName;
+}
+
+async function saveIndex(name, index) {
+  const filePath = `data/${name}-index.json`;
+  await writeFile(filePath, JSON.stringify(index));
 }
 
 export function replaceRepositoryWithSafeChar(line) {
