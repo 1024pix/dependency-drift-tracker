@@ -39,6 +39,10 @@
             background-color: #eee;
         }
 
+        #nav button.selected {
+            background-color: #eee;
+        }
+
         @media (max-width: 480px) {
             nav {
                 height: auto;
@@ -84,8 +88,10 @@
       const li = document.createElement("li");
       const button = document.createElement("button");
       button.innerText = repository;
+      button.setAttribute("data-file-name", fileName);
       button.onclick = () => {
-        displayChart(fileName)
+        displayChart(fileName);
+        selectButton(fileName);
       };
       li.appendChild(button);
       nav.appendChild(li);
@@ -166,10 +172,20 @@
     })
   }
 
+  function selectButton(fileName) {
+    const buttons = document.querySelectorAll("[data-file-name]");
+    buttons.forEach(button => {
+      button.classList.remove("selected");
+    });
+    const button = document.querySelector(`[data-file-name="${fileName}"]`);
+    button.classList.add("selected");
+  }
+
   async function main() {
     const historyIndex = await getHistoryIndex();
     displayNav(historyIndex);
     await displayChart(historyIndex[0].fileName);
+    await selectButton(historyIndex[0].fileName);
   }
 
   main();
