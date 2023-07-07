@@ -103,12 +103,15 @@ export function getSafeRepositoryName(repositoryURL, path) {
 }
 
 async function saveResult(line, summary, result) {
-  await saveSummary(line, summary);
-  await saveLastResult(line, result);
+  return Promise.all([
+    saveSummary(line, summary),
+    saveLastResult(line, result)
+  ]);
 }
 
 async function saveSummary(line, summary) {
-  const filePath = `data/history-${line}.json`;
+  const fileName = `history-${line}.json`;
+  const filePath = `data/${fileName}`;
   try {
     await access(filePath, constants.F_OK);
   } catch (e) {
@@ -117,11 +120,14 @@ async function saveSummary(line, summary) {
   const content = JSON.parse(await readFile(filePath, { encoding: 'utf8' }));
   content.push(summary);
   await writeFile(filePath, JSON.stringify(content));
+  return fileName;
 }
 
 async function saveLastResult(line, result) {
-  const filePath = `data/last-run-${line}.json`;
+  const fileName = `last-run-${line}.json`;
+  const filePath = `data/${fileName}`;
   await writeFile(filePath, JSON.stringify(result));
+  return fileName;
 }
 
 export function replaceRepositoryWithSafeChar(line) {
