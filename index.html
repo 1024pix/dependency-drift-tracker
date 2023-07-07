@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width"/>
+    <title>Dependency Drift Tracker</title>
+    <style type="text/css">
+        body {
+            text-align: center;
+        }
+
+        #chart {
+            width: 100%;
+            height: 80vh;
+            margin: 0 5vw 0 25vw;
+        }
+
+        nav {
+            height: 100%;
+            width: 20vw;
+            position: absolute;
+            padding: 0;
+            left: 0;
+            top: 0;
+        }
+
+        #nav {
+            list-style: none;
+            padding: 5vw 0;
+        }
+
+        #nav button {
+            width: 100%;
+            padding: 1em;
+            background-color: white;
+            border: 0px;
+            cursor: pointer;
+        }
+
+        #nav button:hover {
+            background-color: #eee;
+        }
+    </style>
+</head>
+<body>
+<h1>Dependency Drift Tracker</h1>
+<nav>
+    <ul id="nav"></ul>
+</nav>
+<canvas id="chart"></canvas>
+<small id="description"></small>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script type="text/javascript">
+  const PATH = 'data/';
+  let chart;
+
+  async function getHistoryIndex() {
+    const response = await fetch(`${PATH}/history-index.json`);
+    return response.json();
+  }
+
+  function displayNav(historyIndex) {
+    const nav = document.getElementById("nav");
+    historyIndex.forEach(({ repository, fileName }) => {
+      const li = document.createElement("li");
+      const button = document.createElement("button");
+      button.innerText = repository;
+      button.onclick = () => {
+        displayChart(fileName)
+      };
+      li.appendChild(button);
+      nav.appendChild(li);
+    });
+  }
+
+  async function displayChart(fileName) {
+    const response = await fetch(`${PATH}/${fileName}`);
+    const data = await response.json();
+    const labels = data.map((d, i) => i);
+
+    const ctx = document.getElementById("chart");
+    if (chart) chart.destroy();
+
+    chart = new Chart(ctx, {
+      data: {
+        labels,
+        datasets: [
+          {
+            type: 'line',
+            label: 'Dependency Drift',
+            data: data.map(d => d.drift),
+            backgroundColor: 'rgba(0, 63, 92, 0.2)',
+            borderColor: 'rgba(0, 63, 92, 1)',
+            borderWidth: 1,
+            yAxisID: "yAxisDrift",
+          },
+          {
+            type: 'line',
+            label: 'Dependency Pulse',
+            data: data.map(d => d.pulse),
+            backgroundColor: 'rgba(155, 209, 132, 0.2)',
+            borderColor: 'rgba(155, 209, 132, 1)',
+            borderWidth: 1,
+            yAxisID: "yAxisPulse",
+          },
+        ],
+      },
+      options: {
+        scales: {
+          yAxisPulse: {
+            position: "right",
+            beginAtZero: true,
+            suggestedMin: 0,
+            title: {
+              display: true,
+              text: 'Pulse',
+              color: 'rgba(155, 209, 132, 1)',
+              font: {
+                size: 18,
+                weight: 'bold'
+              }
+            }
+          },
+          yAxisDrift: {
+            position: "left",
+            beginAtZero: true,
+            suggestedMin: 0,
+            title: {
+              display: true,
+              text: 'Drift',
+              color: 'rgba(0, 63, 92, 1)',
+              font: {
+                size: 18,
+                weight: 'bold'
+              }
+            }
+          },
+        },
+      },
+    });
+  }
+
+  async function main() {
+    const historyIndex = await getHistoryIndex();
+    displayNav(historyIndex);
+    await displayChart(historyIndex[0].fileName);
+  }
+
+  main();
+</script>
+</body>
+</html>
