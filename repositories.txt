@@ -5,7 +5,6 @@ https://github.com/1024pix/pix.git#api
 https://github.com/1024pix/pix.git#certif
 https://github.com/1024pix/pix.git#mon-pix
 https://github.com/1024pix/pix.git#orga
-https://github.com/1024pix/pix-editor.git
 https://github.com/1024pix/pix-editor.git#api
 https://github.com/1024pix/pix-editor.git#pix-editor
 https://github.com/1024pix/pix-db-stats.git
