@@ -83,27 +83,22 @@ async function displayTitleAndSummary({ repository, path, line }) {
 }
 
 
-function createChart(ctx, label, data, property, baseColor) {
-  const labels = data.map((d, i) => new Date(d.date).toLocaleDateString());
+function createChart(ctx, data) {
   return new Chart(ctx, {
-    data: {
-      labels,
-      datasets: [
-        {
-          type: 'line',
-          label,
-          data: data.map(d => formatFloat(d[property])),
-          backgroundColor: `rgba(${baseColor.join()}, 0.2)`,
-          borderColor: `rgba(${baseColor.join()}, 1)`,
-          borderWidth: 1,
-        },
-      ],
-    },
+    data,
     options: {
       plugins: {
         tooltip: {
           callbacks: {
-            label: ({label, formattedValue}) => `${formattedValue} libyears`
+            label: (context) => {
+              const dataset = context.dataset;
+              const index = context.dataIndex;
+              const value = dataset.data[index];
+              const label = dataset.label || "";
+              const unit = dataset.unit || "";
+
+              return `${label}: ${value} (${unit})`;
+            },
           }
         }
       },
@@ -113,6 +108,14 @@ function createChart(ctx, label, data, property, baseColor) {
           beginAtZero: true,
           suggestedMin: 0,
         },
+        y2: {
+          position: "right",
+          beginAtZero: true,
+          suggestedMin: 0,
+          grid: {
+            drawOnChartArea: false,
+          },
+        }
       },
     },
   });
@@ -126,9 +129,53 @@ async function displayChart(line) {
   if (driftChart) driftChart.destroy();
   if (pulseChart) pulseChart.destroy();
 
-  driftChart = createChart(driftCtx, 'Dependency Drift', data, 'drift', [0, 63, 92]);
-  pulseChart = createChart(pulseCtx, 'Dependency Pulse', data, 'pulse', [155, 209, 132]);
+  driftChart = createChart(driftCtx, getDataForDriftChart(data));
+  pulseChart = createChart(pulseCtx, getDataForPulseChart(data));
 }
+
+function getDataForDriftChart(data) {
+  const baseColor = [0, 63, 92];
+  return {
+    labels: data.map((d, i) => new Date(d.date).toLocaleDateString()),
+    datasets: [
+      {
+        type: 'line',
+        label: 'Dependency Drift',
+        data: data.map(d => formatFloat(d.drift)),
+        backgroundColor: `rgba(${baseColor.join()}, 0.2)`,
+        borderColor: `rgba(${baseColor.join()}, 1)`,
+        borderWidth: 1,
+        yAxisID: 'y',
+        unit: 'libyears',
+      },
+      {
+        type: 'bar',
+        label: 'Merged Bump Pull Requests',
+        data: data.map(d => d.mergedBumpPullRequests),
+        yAxisID: 'y2',
+        unit: 'PR'
+      }
+    ],
+  }
+}
+
+function getDataForPulseChart(data) {
+  const baseColor = [155, 209, 132];
+  return {
+    labels: data.map((d, i) => new Date(d.date).toLocaleDateString()),
+    datasets: [
+      {
+        type: 'line',
+        label: 'Dependency Pulse',
+        data: data.map(d => formatFloat(d.pulse)),
+        backgroundColor: `rgba(${baseColor.join()}, 0.2)`,
+        borderColor: `rgba(${baseColor.join()}, 1)`,
+        borderWidth: 1,
+        unit: 'libyears',
+      },
+    ],
+  }
+};
 
 async function displayLastRun(line) {
   if (table) table.destroy();
