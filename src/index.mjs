@@ -4,6 +4,7 @@ import { sep } from 'node:path';
 import util from 'node:util';
 import { exec as execNoPromise } from 'node:child_process';
 import { chdir, cwd } from 'node:process';
+import axios from 'axios';
 import simpleGit from 'simple-git';
 import { libyear } from 'francois-libyear';
 import preferredPM from 'preferred-pm';
@@ -43,7 +44,8 @@ export async function main() {
   for await (const { repository, path, packagePath, packageManager } of installResult) {
     const result = await calculateRepository(packagePath, packageManager);
     const summary = createSummary(result);
-    await saveResult(`${repository}#${path}`, summary, result);
+    const mergedBumpPullRequests = await getMergedBumpPullRequestsForYesterday(repository, path);
+    await saveResult(`${repository}#${path}`, summary, result, mergedBumpPullRequests);
   }
 }
 
@@ -91,19 +93,25 @@ async function calculateRepository(packagePath, packageManager) {
   return result;
 }
 
-async function saveResult(line, summary, result) {
-  await saveSummary(line, summary);
+async function saveResult(line, summary, result, mergedBumpPullRequests) {
+  await saveSummary(line, summary, mergedBumpPullRequests);
   await saveLastResult(line, result);
 }
 
-async function saveSummary(line, summary) {
+async function saveSummary(line, summary, mergedBumpPullRequests) {
   const filePath = `data/history-${replaceRepositoryWithSafeChar(line)}.json`;
   try {
     await access(filePath, constants.F_OK);
   } catch (e) {
     await writeFile(filePath, JSON.stringify([]));
   }
-  const content = JSON.parse(await readFile(filePath, { encoding: 'utf8' }));
+  const content = JSON.parse(await readFile(filePath, {encoding: 'utf8'}));
+  const yesterdaySummary = content.find((summary) => {
+    return new Date(summary.date).toISOString().split('T')[0] === getYesterday().toISOString().split('T')[0];
+  })
+  if (yesterdaySummary) {
+    yesterdaySummary.mergedBumpPullRequests = mergedBumpPullRequests;
+  }
   content.push(summary);
   await writeFile(filePath, JSON.stringify(content));
 }
@@ -119,4 +127,40 @@ export function createSummary(result) {
     memo.pulse += dep.pulse || 0;
     return memo;
   }, { drift: 0, pulse: 0, date: new Date() });
+}
+
+async function getMergedBumpPullRequestsForYesterday(repository, path, githubToken = process.env.GITHUB_TOKEN) {
+  const result = await axios({
+    url: 'https://api.github.com/graphql',
+    method: 'post',
+    headers: {
+      Authorization: `bearer ${githubToken}`,
+      "content-type": "application/json",
+    },
+    data: {
+      query: getQueryForMergedBumpPullRequestsForYesterday(repository, path),
+    }
+  });
+
+  return result.data.data.search.nodes.length;
+}
+
+
+export function getQueryForMergedBumpPullRequestsForYesterday(repository, path) {
+  const yesterday = getYesterday().toISOString().split('T')[0];
+  const pathToSearch = path !== '' ? `(${path})` : '';
+  return `
+    query {
+      search(first: 100, query: "repo:${repository} is:pr is:merged merged:${yesterday}..${yesterday} in:title [BUMP] ${pathToSearch}", type: ISSUE) {
+        nodes {
+          ... on PullRequest {
+            title
+          }
+        }
+      }
+    }`;
+}
+
+function getYesterday() {
+  return new Date(new Date().setDate(new Date().getDate() - 1));
 }
