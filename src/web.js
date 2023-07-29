@@ -1,7 +1,7 @@
-import Chart from 'chart.js/auto';
 import DataTable from 'datatables.net-bs';
 import 'datatables.net-bs/css/dataTables.bootstrap.css'
-import { parseFile, replaceRepositoryWithSafeChar } from './utils.mjs';
+import { formatFloat, parseFile, replaceRepositoryWithSafeChar } from './utils.mjs';
+import { createDriftChart, createPulseChart } from './chart';
 
 const PATH = process.env.REPOSITORY_URL || `https://raw.githubusercontent.com/1024pix/dependency-drift-tracker/main`;
 
@@ -9,10 +9,6 @@ let driftChart;
 let pulseChart;
 let table;
 const historyFiles = {};
-
-function formatFloat(number) {
- return Number.isInteger(number) ? number : number?.toFixed(2);
-}
 
 const createLink = (href, content) => {
   const a = document.createElement('a');
@@ -82,45 +78,6 @@ async function displayTitleAndSummary({ repository, path, line }) {
   pulseSummary.textContent = `${formatFloat(lastResult.pulse)} libyears`;
 }
 
-
-function createChart(ctx, data) {
-  return new Chart(ctx, {
-    data,
-    options: {
-      plugins: {
-        tooltip: {
-          callbacks: {
-            label: (context) => {
-              const dataset = context.dataset;
-              const index = context.dataIndex;
-              const value = dataset.data[index];
-              const label = dataset.label || "";
-              const unit = dataset.unit || "";
-
-              return `${label}: ${value} (${unit})`;
-            },
-          }
-        }
-      },
-      scales: {
-        y: {
-          position: "left",
-          beginAtZero: true,
-          suggestedMin: 0,
-        },
-        y2: {
-          position: "right",
-          beginAtZero: true,
-          suggestedMin: 0,
-          grid: {
-            drawOnChartArea: false,
-          },
-        }
-      },
-    },
-  });
-}
-
 async function displayChart(line) {
   const data = await historyFiles[line];
 
@@ -129,53 +86,9 @@ async function displayChart(line) {
   if (driftChart) driftChart.destroy();
   if (pulseChart) pulseChart.destroy();
 
-  driftChart = createChart(driftCtx, getDataForDriftChart(data));
-  pulseChart = createChart(pulseCtx, getDataForPulseChart(data));
+  driftChart = createDriftChart(driftCtx, data);
+  pulseChart = createPulseChart(pulseCtx, data);
 }
-
-function getDataForDriftChart(data) {
-  const baseColor = [0, 63, 92];
-  return {
-    labels: data.map((d, i) => new Date(d.date).toLocaleDateString()),
-    datasets: [
-      {
-        type: 'line',
-        label: 'Dependency Drift',
-        data: data.map(d => formatFloat(d.drift)),
-        backgroundColor: `rgba(${baseColor.join()}, 0.2)`,
-        borderColor: `rgba(${baseColor.join()}, 1)`,
-        borderWidth: 1,
-        yAxisID: 'y',
-        unit: 'libyears',
-      },
-      {
-        type: 'bar',
-        label: 'Merged Bump Pull Requests',
-        data: data.map(d => d.mergedBumpPullRequests),
-        yAxisID: 'y2',
-        unit: 'PR'
-      }
-    ],
-  }
-}
-
-function getDataForPulseChart(data) {
-  const baseColor = [155, 209, 132];
-  return {
-    labels: data.map((d, i) => new Date(d.date).toLocaleDateString()),
-    datasets: [
-      {
-        type: 'line',
-        label: 'Dependency Pulse',
-        data: data.map(d => formatFloat(d.pulse)),
-        backgroundColor: `rgba(${baseColor.join()}, 0.2)`,
-        borderColor: `rgba(${baseColor.join()}, 1)`,
-        borderWidth: 1,
-        unit: 'libyears',
-      },
-    ],
-  }
-};
 
 async function displayLastRun(line) {
   if (table) table.destroy();

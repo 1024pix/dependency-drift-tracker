@@ -18,3 +18,7 @@ export function parseRepositoryLine(line) {
 export function replaceRepositoryWithSafeChar(line) {
   return line.replaceAll(/(https?:\/\/)/g, '').replaceAll(/(-|\/|:|\.|#)/g, '-');
 }
+
+export function formatFloat(number) {
+  return Number.isInteger(number) ? number : number?.toFixed(2);
+}
