@@ -47,6 +47,9 @@ export function createDriftChart(ctx, data) {
           grid: {
             drawOnChartArea: false,
           },
+          ticks: {
+            stepSize: 1,
+          },
         }
       },
     },
