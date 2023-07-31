@@ -22,6 +22,8 @@ jobs:
       run: npm ci
     - name: Update data
       run: node bin/main.mjs
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Commit update
       run: |
         git config user.name 'Dependency drift tracker'
