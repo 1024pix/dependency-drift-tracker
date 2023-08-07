@@ -24,8 +24,4 @@ jobs:
       run: node bin/main.mjs
     - name: Commit update
       run: |
-        git config user.name 'Dependency drift tracker'
-        git config user.email 'dependency-drift-tracker@users.noreply.github.com'
-        git add data
-        git commit --message 'Update data'
         git push
