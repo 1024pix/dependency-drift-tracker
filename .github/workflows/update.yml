@@ -21,7 +21,7 @@ jobs:
     - name: Install packages
       run: npm ci
     - name: Update data
-      run: node bin/main.mjs
+      run: node bin/main.js
     - name: Commit update
       run: |
         git config user.name 'Dependency drift tracker'
