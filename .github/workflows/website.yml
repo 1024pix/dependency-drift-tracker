@@ -1,21 +1,19 @@
-name: Update libyear info
+name: Update website
 
 on:
-  schedule:
-    - cron:  '0 7 * * *'
+  push:
   workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
-  update:
+  generate-website:
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
-    - name: Update data
+    - name: Generate website
       uses: Dependency-Drift-Tracker/dependency-drift-tracker-action@v1
       with:
-        command: update-data
-        secrets: ${{ toJSON(secrets) }}
+        command: generate-website
