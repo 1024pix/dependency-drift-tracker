@@ -2,26 +2,9 @@
 
 Ce projet a pour but de suivre nos retards sur les mises à jour de dépendances pour nos projets Node.js via la métrique [libyear][].
 
-## Installation
+Il utilise [dependency-drift-tracker][].
 
-```bash
-npm ci
-```
-
-## Utilisation
-
-Tout d'abord, il faut remplir le fichier `repositories.txt` avec les urls des repositories à suivre.
-Dans le cas d'un monorepo, vous pouvez suffixer l'url par `#path` pour indiquer le chemin vers le `package.json` à suivre.
-
-Ensuite, il faut lancer le script `bin/main.mjs` :  
-
-```bash
-node bin/main.mjs
-```
-
-Nous avons fait le choix, de lancer le script toutes les 24h avec un cron dans une GitHub Action 
-et qui commit les nouveaux résultats.
-
-Enfin, la page `index.html` permet de visualiser les résultats.
+La page de suivi: https://1024pix.github.io/dependency-drift-tracker/
 
 [libyear]: https://libyear.com/
+[dependency-drift-tracker]: https://github.com/dependency-Drift-Tracker/dependency-drift-tracker
