@@ -10,6 +10,7 @@ https://github.com/1024pix/pix-editor.git#api
 https://github.com/1024pix/pix-editor.git#pix-editor
 https://github.com/1024pix/pix-db-stats.git
 https://github.com/1024pix/pix-db-replication.git
-https://github.com/1024pix/pix-site.git
+https://github.com/1024pix/pix-site.git#pix-pro
+https://github.com/1024pix/pix-site.git#pix-site
 https://github.com/1024pix/pix-tutos.git
 https://github.com/1024pix/pix-bot.git
