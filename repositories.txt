@@ -1,5 +1,5 @@
 https://github.com/1024pix/pix.git
-https://github.com/1024pix/pix.git#1d
+https://github.com/1024pix/pix.git#junior
 https://github.com/1024pix/pix.git#admin
 https://github.com/1024pix/pix.git#api
 https://github.com/1024pix/pix.git#audit-logger
