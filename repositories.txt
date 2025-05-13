@@ -14,7 +14,6 @@ https://github.com/1024pix/pix-site.git#pix-pro
 https://github.com/1024pix/pix-site.git#pix-site
 https://github.com/1024pix/pix-tutos.git
 https://github.com/1024pix/pix-bot.git
-https://github.com/1024pix/pix-api-data.git
 https://github.com/1024pix/pix-ui.git
 https://github.com/1024pix/scalingo-review-app-manager.git
 https://github.com/1024pix/eslint-plugin.git
