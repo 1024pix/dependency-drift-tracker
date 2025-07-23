@@ -1,1 +1,1 @@
-[{"dependency":"cron","drift":0.12046790830749433,"pulse":0.024641163062896567,"releases":1,"major":0,"minor":0,"patch":1,"latest":"4.3.2"},{"dependency":"scalingo","drift":0.49556116826491986,"pulse":0.030116977076873584,"releases":7,"major":0,"minor":3,"patch":4,"latest":"0.14.3"}]
+[{"dependency":"cron","drift":0.12046790830749433,"pulse":0.027379070069885075,"releases":1,"major":0,"minor":0,"patch":1,"latest":"4.3.2"},{"dependency":"scalingo","drift":0.49556116826491986,"pulse":0.03285488408386209,"releases":7,"major":0,"minor":3,"patch":4,"latest":"0.14.3"}]
