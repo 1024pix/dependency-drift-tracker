@@ -19,4 +19,4 @@ https://github.com/1024pix/scalingo-review-app-manager.git
 https://github.com/1024pix/eslint-plugin.git
 https://github.com/1024pix/oppsy.git
 https://github.com/1024pix/ember-testing-library.git
-https://github.com/1024pix/pix-data-admin
+https://github.com/1024pix/pix-data-admin.git
