@@ -14,6 +14,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+    - uses: actions/setup-node@v7
+      with:
+        node-version: 24
     - name: Update data
       uses: Dependency-Drift-Tracker/dependency-drift-tracker-action@7df80e5c62257c330033a683a44cdd52145c39fb # v1
       with:
