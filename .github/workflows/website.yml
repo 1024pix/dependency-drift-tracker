@@ -12,8 +12,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
     - name: Generate website
-      uses: Dependency-Drift-Tracker/dependency-drift-tracker-action@v1
+      uses: Dependency-Drift-Tracker/dependency-drift-tracker-action@7df80e5c62257c330033a683a44cdd52145c39fb # v1
       with:
         command: generate-website
