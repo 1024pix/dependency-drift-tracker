@@ -2,7 +2,7 @@ name: Update libyear info
 
 on:
   schedule:
-    - cron:  '0 7 * * *'
+    - cron: "0 7 * * *"
   workflow_dispatch:
 
 permissions:
@@ -13,12 +13,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-    - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
-      with:
-        node-version: 24
-    - name: Update data
-      uses: Dependency-Drift-Tracker/dependency-drift-tracker-action@7df80e5c62257c330033a683a44cdd52145c39fb # v1
-      with:
-        command: update-data
-        secrets: ${{ toJSON(secrets) }}
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: 24
+      - name: Update data
+        uses: Dependency-Drift-Tracker/dependency-drift-tracker-action@c42451e1172e17fe0a384f595303c09af25cbb4f # v1
+        with:
+          command: update-data
+          secrets: ${{ toJSON(secrets) }}
