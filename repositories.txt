@@ -8,15 +8,12 @@ https://github.com/1024pix/pix.git#mon-pix
 https://github.com/1024pix/pix.git#orga
 https://github.com/1024pix/pix-editor.git#api
 https://github.com/1024pix/pix-editor.git#pix-editor
-https://github.com/1024pix/pix-epreuves.git
 https://github.com/1024pix/pix-db-stats.git
 https://github.com/1024pix/pix-db-replication.git
 https://github.com/1024pix/pix-site.git#pix-pro
 https://github.com/1024pix/pix-site.git#pix-site
 https://github.com/1024pix/pix-tutos.git
 https://github.com/1024pix/pix-bot.git
-https://github.com/1024pix/pix-assets-manager.git
-https://github.com/1024pix/pix-companion.git
 https://github.com/1024pix/scalingo-review-app-manager.git
 https://github.com/1024pix/eslint-plugin.git
 https://github.com/1024pix/oppsy.git
@@ -24,6 +21,5 @@ https://github.com/1024pix/pix-data-admin.git
 https://github.com/1024pix/pix-ui-libs.git
 https://github.com/1024pix/pix-ui-libs.git#ember/nebulix
 https://github.com/1024pix/pix-ui-libs.git#ember/testing-library
-https://github.com/1024pix/chatpix.git
 https://github.com/1024pix/stylelint-config.git
 https://github.com/1024pix/modulix-editor.git
