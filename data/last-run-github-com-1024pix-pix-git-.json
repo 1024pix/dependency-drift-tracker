@@ -1,1 +1,1 @@
-[{"dependency":"@cyclonedx/cyclonedx-npm","drift":0,"pulse":0.17248814144027597,"releases":0,"major":0,"minor":0,"patch":0},{"dependency":"prettier","drift":0.04654441911880463,"pulse":0.008213721020965523,"releases":1,"major":0,"minor":0,"patch":1,"latest":"3.9.10"}]
+[{"dependency":"@cyclonedx/cyclonedx-npm","drift":0,"pulse":0.1752260484472645,"releases":0,"major":0,"minor":0,"patch":0},{"dependency":"prettier","drift":0.04654441911880463,"pulse":0.010951628027954031,"releases":1,"major":0,"minor":0,"patch":1,"latest":"3.9.10"}]
