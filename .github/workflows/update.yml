@@ -14,14 +14,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-      - uses: pnpm/action-setup@v6
+      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6
         with:
-          version: 11
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+          version: 12
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
           node-version: 24
       - name: Update data
-        uses: Dependency-Drift-Tracker/dependency-drift-tracker-action@c42451e1172e17fe0a384f595303c09af25cbb4f # v1
+        uses: Dependency-Drift-Tracker/dependency-drift-tracker-action@0a335f733492731ee3d1d1f081b0810b1773a4f4 # v1
         with:
           command: update-data
           secrets: ${{ toJSON(secrets) }}
