@@ -14,6 +14,6 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - name: Generate website
-        uses: Dependency-Drift-Tracker/dependency-drift-tracker-action@c42451e1172e17fe0a384f595303c09af25cbb4f # v1
+        uses: Dependency-Drift-Tracker/dependency-drift-tracker-action@0a335f733492731ee3d1d1f081b0810b1773a4f4 # v1
         with:
           command: generate-website
