@@ -19,7 +19,7 @@ jobs:
           version: 12
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
-          node-version: 24
+          node-version: 26
       - name: Update data
         uses: Dependency-Drift-Tracker/dependency-drift-tracker-action@0a335f733492731ee3d1d1f081b0810b1773a4f4 # v1
         with:
